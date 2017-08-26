@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="http://oss.sheetjs.com/js-xlsx/xlsx.core.min.js"></script>
+	<script type="text/javascript">
+	
+
+	function read(){
+		/* set up XMLHttpRequest */
+		var url = "sample.xlsx";
+		var oReq = new XMLHttpRequest();
+		oReq.open("GET", url, true);
+		oReq.responseType = "arraybuffer";
+
+		oReq.onload = function(e) {
+		  var arraybuffer = oReq.response;
+
+		  /* convert data to binary string */
+		  var data = new Uint8Array(arraybuffer);
+		  var arr = new Array();
+		  for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+		  var bstr = arr.join("");
+
+		  /* Call XLSX */
+		  var workbook = XLSX.read(bstr, {type:"binary"});
+	
+			/* DO SOMETHING WITH workbook HERE */
+
+				var first_sheet_name = workbook.SheetNames[0];
+
+				/* Get worksheet */
+				var worksheet = workbook.Sheets[first_sheet_name];
+
+				var excel1 = XLSX.utils.sheet_to_json(worksheet);
+				
+				console.log(excel1[0])
+
+		 
+		}
+
+		oReq.send();
+	}
+		
+	</script>
+</head>
+<body>
+<button onclick="read()">click</button>
+
+</body>
+</html>
